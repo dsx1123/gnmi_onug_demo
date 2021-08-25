@@ -1,0 +1,23 @@
+---
+- name: update telegraf gnmi plugin config
+  hosts: telegraf
+  gather_facts: false
+  vars:
+    nxos: "{{ groups.nxos | product(['50051']) | map('join', ':') |list }}"
+    #switch_pass: "{{ lookup('env', 'SWITCH_PASS') }}"
+  tasks:
+
+  - name: create gnmi event_baaed config of telegraf
+    template:
+      src: template/gnmi_on_change.conf.j2
+      dest: /opt/telemetry_collector/etc/telegraf/gnmi_on_change.conf
+
+  - name: create gnmi sample_based config of telegraf
+    template:
+      src: template/gnmi.conf.j2
+      dest: /opt/telemetry_collector/etc/telegraf/telegraf.d/gnmi.conf
+
+  - name: restart telegraf containers
+    command: ./build.sh restart telegraf
+    args:
+      chdir: /opt/telemetry_collector/

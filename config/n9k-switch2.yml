@@ -1,0 +1,79 @@
+---
+mgmt_ip: 10.195.225.190
+gnmi_port: 50051
+username: admin
+hostname: n9k-switch2
+feature:
+  - lldp
+  - grpc
+  - bgp
+  - nxapi
+  - ifvlan
+
+vlan:
+  - name: vlan_web
+    id: 100
+  - name: vlan_app
+    id: 200
+  - name: vlan_db
+    id: 300
+  - name: vlan_mgmt
+    id: 1000
+
+interface:
+  loopback:
+    - name: lo1
+      ipv4: 2.2.2.2/32
+    - name: lo10
+      ipv4: 10.100.100.2/32
+  routed:
+    - name: eth1/1
+      ipv4: 172.16.10.2/30
+  svi:
+    - name: vlan100
+      vlan_id: 100
+      ipv4: 172.25.11.1/24
+    - name: vlan200
+      vlan_id: 200
+      ipv4: 172.25.21.1/24
+    - name: vlan300
+      vlan_id: 300
+      ipv4: 172.25.31.1/24
+  trunk:
+    - name: eth1/2
+      mode: trunk
+      vlan: [100, 200, 300]
+    - name: eth1/3
+      mode: trunk
+      vlan: [100, 200, 300]
+    - name: eth1/4
+      mode: trunk
+      vlan: [1000]
+ntp:
+  - server: 10.195.225.200
+    vrf: management
+    prefer: true
+  - server: 10.81.254.202
+    vrf: management
+bgp:
+  as: 65002
+  rtr_id: 10.100.100.2
+  redistribution:
+    type: direct
+    rt_map: redis_connected
+  neighbor:
+    - peer: 172.16.10.1
+      peer_as: 65001
+
+prefix_list:
+  - name: connected
+    prefix: 
+      - 172.25.11.0/24
+      - 172.25.21.0/24
+      - 172.25.31.0/24
+route_map:
+  - name: redis_connected 
+    match:
+      - seq: 10
+        action: ANY
+        ip_prefix: connected
