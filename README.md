@@ -1,3 +1,2 @@
-[![pipeline status](https://gitlab-sjc.cisco.com/shdu/gnmi_onug_demo/badges/master/pipeline.svg)](https://gitlab-sjc.cisco.com/shdu/gnmi_onug_demo/commits/master)
-
-**GNMI NXOS demo**# gnmi_onug_demo
+# **GNMI NXOS demo
+Demo code used in session [Cisco Proof of Concept: Automating Cisco Nexus Switches with gNMI and Open Source Tools](https://fall.onug.net/session/cisco-proof-of-concept-automating-cisco-nexus-switches-with-gnmi-and-open-source-tools/)
