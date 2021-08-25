@@ -1,0 +1,32 @@
+stages:
+  - deploy
+  - verify
+deploy_on_stagging:
+  image: 
+    name: shdu/python3:latest  
+  stage: deploy
+  before_script:
+    - export http_proxy="http://proxy.esl.cisco.com:8080"
+    - export https_proxy="http://proxy.esl.cisco.com:8080"
+    - export no_proxy="localhost,127.0.0.1,10.195.225.189,10.195.225.190"
+    - python3 -m pip install -r requirements.txt
+
+  script:
+    - python3 --version
+    - python3 staging.py
+
+verify:
+  stage: verify
+  image: 
+    name: shdu/python3:latest  
+  before_script:
+    - export http_proxy="http://proxy.esl.cisco.com:8080"
+    - export https_proxy="http://proxy.esl.cisco.com:8080"
+    - export no_proxy="localhost,127.0.0.1,10.195.225.189,10.195.225.190"
+    - python3 -m pip install -r requirements.txt
+    - python3 -m pip install pytest
+
+
+  script:
+    - python3 -m pytest test/
+

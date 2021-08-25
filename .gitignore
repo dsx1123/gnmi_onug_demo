@@ -1,0 +1,5 @@
+.switch_pass
+get.py
+*.swp
+__pycache__/
+.pytest_cache/
